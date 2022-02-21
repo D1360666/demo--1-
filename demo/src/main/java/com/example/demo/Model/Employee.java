@@ -1,10 +1,18 @@
 package com.example.demo.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee {
@@ -21,14 +29,25 @@ public class Employee {
     @Column(length = 10, nullable = false, unique = true)
     private String employeeid;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name="id_role")
+    private Role role;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_project", 
+             joinColumns = { @JoinColumn(name = "employee_id") }, 
+             inverseJoinColumns = { @JoinColumn(name = "project_id") })
+    private List<Project> projects = new ArrayList<Project>();
+
     public Employee() {
-
     }
+ 
 
-    public Employee(String firstName, String lastName, String employeeid) {
+    public Employee(String firstName, String lastName, String employeeid, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.employeeid = employeeid;
+        this.role = role;
     }
 
     public Long getId() {
@@ -63,6 +82,14 @@ public class Employee {
         this.employeeid = employeeid;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -70,6 +97,15 @@ public class Employee {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

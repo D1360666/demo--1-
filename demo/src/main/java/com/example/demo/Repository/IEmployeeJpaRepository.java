@@ -18,5 +18,7 @@ public interface IEmployeeJpaRepository extends JpaRepository<Employee, Long>{
 
     List<Employee> findByLastName(String lastName);
 
+    Iterable<Employee> findByNameContaining(String employeedId);
+
 
 }
